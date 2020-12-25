@@ -47,8 +47,30 @@ export const getData = {
                 for (const prop in item) {
                     if (item.hasOwnProperty(prop) && PARAM.search.includes(prop)
                         && item[prop].toLowerCase().includes(value.toLowerCase())) {
-                            return true
+                        return true
                     }
+                }
+            })
+            callback(result)
+        })
+    },
+    catalog(callback) {
+        this.get((data) => {
+            const result = data.reduce((arr, item) => {
+                if (!arr.includes(item.category)) {
+                    arr.push(item.category)
+                }
+                return arr
+            }, [])
+            callback(result)
+        })
+    },
+    subCatalog(value, callback) {
+        this.get((data) => {
+            const result = []
+            data.forEach(item => {
+                if (!result.includes(item.subcategory) && item.category === value) {
+                    result.push(item.subcategory)
                 }
             })
             callback(result)
