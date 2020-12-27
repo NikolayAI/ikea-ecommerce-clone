@@ -7,10 +7,17 @@ const PARAM = {
 
 export const getData = {
     url: 'database/dataBase.json',
+    async getData(url) {
+        const response = await fetch(url)
+        if (!response.ok) {
+            throw new Error(`Ошибка по адресу ${url}, статус ошибки ${response.status}`)
+        }
+        return await response.json()
+    },
     get(process) {
-        fetch(this.url)
-            .then(res => res.json())
+        this.getData(this.url)
             .then(process)
+            .catch(err => console.error(err))
     },
     wishList(list, callback) {
         this.get((data) => {
